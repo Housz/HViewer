@@ -6,6 +6,7 @@ ViewerWidget::ViewerWidget(osgQt::GraphicsWindowQt* gw) : QWidget(), _gw(gw), _s
 	_gw = gw;
 
 	setScene(NULL);
+	//_viewer->setSceneData(osgDB::readNodeFile("C:\\Users\\Housz\\Desktop\\obj\\test.3dt"));
 
 	//_root = new osg::Group;
 	//_root->addChild(_scene);
@@ -18,6 +19,7 @@ ViewerWidget::ViewerWidget(osgQt::GraphicsWindowQt* gw) : QWidget(), _gw(gw), _s
 
 ViewerWidget::~ViewerWidget()
 {
+
 }
 
 void ViewerWidget::setScene(osg::Node* root)
@@ -42,12 +44,9 @@ void ViewerWidget::setScene(osg::Node* root)
 	_viewer->addEventHandler(new osgViewer::StatsHandler);
 	_viewer->setCameraManipulator(new osgGA::TrackballManipulator);
 	_viewer->setThreadingModel(osgViewer::Viewer::SingleThreaded);
-	
 
 	_pathPickHandler = new PathPickHandler(_viewer);
 	_viewer->addEventHandler(_pathPickHandler);
-
-	_viewer->setSceneData(osgDB::readNodeFile("C:\\Users\\Housz\\Desktop\\obj\\test.3dt"));
 
 	QVBoxLayout* layout = new QVBoxLayout;
 	layout->addWidget(_gw->getGLWidget());
@@ -68,5 +67,17 @@ void ViewerWidget::removeOperation()
 {
 	_pathPickHandler->removeBoxes();
 	_viewer->setCameraManipulator(new osgGA::TrackballManipulator);
+}
+
+void ViewerWidget::changeToLineMode()
+{
+	_viewer->getSceneData()->asGroup()->getOrCreateStateSet()
+		->setAttributeAndModes(new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE));
+}
+
+void ViewerWidget::changeToSurfaceMode()
+{
+	_viewer->getSceneData()->asGroup()->getOrCreateStateSet()
+		->setAttributeAndModes(new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::FILL));
 }
 

@@ -87,7 +87,7 @@ public:
 			}
 		}
 
-		// 导出.path
+		// 导出.path文件
 		std::ofstream fout("C:\\Users\\Housz\\Desktop\\1.path");
 		animationPath->write(fout);
 		fout.close();

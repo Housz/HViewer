@@ -26,6 +26,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 	QAction* closeAction = fileMenu->addAction("Close");
 	fileMenu->addSeparator();
 	QAction* homeAction = fileMenu->addAction("Home");
+	fileMenu->addSeparator();
+	QAction* surfaceAction = fileMenu->addAction("Surface");
+	QAction* lineAction = fileMenu->addAction("Line");
 
 	QMenu* pathMenu = bar->addMenu("Path");
 	QAction* palyAction = pathMenu->addAction("Play");
@@ -59,11 +62,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 		QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
 			"/home",
 			tr("Scene (*.osg *.3dt *.obj)"));
+
+		QTextCodec *code = QTextCodec::codecForName("GB2312");
+
+		std::string name = code->fromUnicode(fileName).data();
+
 		qDebug() << fileName;
 
 		if (!fileName.isEmpty())
 		{
-			_viewerWidget->setScene(osgDB::readNodeFile(fileName.toStdString()));
+			_viewerWidget->setScene(osgDB::readNodeFile(name));
 		}
 
 		setStatusText(fileName);
@@ -74,6 +82,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 		setStatusText("");
 	});
 
+
+	connect(surfaceAction, &QAction::triggered, [=]() {
+		_viewerWidget->changeToSurfaceMode();
+	});
+
+	connect(lineAction, &QAction::triggered, [=]() {
+		_viewerWidget->changeToLineMode();
+	});
 
 
 	//QToolBar* toolBar = new QToolBar(this);

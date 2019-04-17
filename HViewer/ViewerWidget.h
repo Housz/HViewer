@@ -9,6 +9,8 @@
 #include <osgGA/TrackballManipulator>
 #include <osgViewer/ViewerEventHandlers>
 #include <osgViewer/Viewer>
+#include <osg/PolygonMode>
+#include <osg/PolygonOffset>
 #include <osgQt/GraphicsWindowQt>
 
 #include "pickHandler.h"
@@ -22,7 +24,8 @@ public:
 	void setScene(osg::Node*);
 	void removeScene();
 	void removeOperation();
-
+	void changeToLineMode();
+	void changeToSurfaceMode();
 
 protected:	
 	QTimer _timer;
