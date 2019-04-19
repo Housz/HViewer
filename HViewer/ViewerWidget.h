@@ -4,6 +4,7 @@
 #include <QtCore/QtCore>
 #include <QtGui/QtGui>
 #include <QVBoxLayout>
+#include <QDebug>
 
 #include <osgDB/ReadFile>
 #include <osgGA/TrackballManipulator>
@@ -27,6 +28,11 @@ public:
 	void changeToLineMode();
 	void changeToSurfaceMode();
 
+	void switchLayer(int index, bool targetStatus);
+	void switchAllLayer(bool targetStatus);
+
+	int getLayerCount();
+
 protected:	
 	QTimer _timer;
 
@@ -44,5 +50,6 @@ protected:
 	{
 		_viewer->frame();
 	}
+
 };
 

@@ -19,16 +19,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 	QMenu* fileMenu = bar->addMenu("File");
 	setMenuBar(bar);
 	QAction* openAction = fileMenu->addAction("Open");
-	fileMenu->addSeparator();
-	QAction* saveAction = fileMenu->addAction("Save");
-	QAction* saveasAction = fileMenu->addAction("Save as");
+	//fileMenu->addSeparator();
+	//QAction* saveAction = fileMenu->addAction("Save");
+	//QAction* saveasAction = fileMenu->addAction("Save as");
 	fileMenu->addSeparator();
 	QAction* closeAction = fileMenu->addAction("Close");
 	fileMenu->addSeparator();
 	QAction* homeAction = fileMenu->addAction("Home");
-	fileMenu->addSeparator();
-	QAction* surfaceAction = fileMenu->addAction("Surface");
-	QAction* lineAction = fileMenu->addAction("Line");
+
 
 	QMenu* pathMenu = bar->addMenu("Path");
 	QAction* palyAction = pathMenu->addAction("Play");
@@ -36,6 +34,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 	pathMenu->addSeparator();
 	QAction* openPathAction = pathMenu->addAction("Open Path");
 	QAction* savePathAction = pathMenu->addAction("Save Path");
+
+	QMenu* modeMenu = bar->addMenu("Mode");
+	QAction* surfaceAction = modeMenu->addAction("Surface");
+	QAction* lineAction = modeMenu->addAction("Line");
 
 	QMenu* helpMenu = bar->addMenu("Help");
 	QAction* aboutAction = helpMenu->addAction("About");
@@ -74,12 +76,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 			_viewerWidget->setScene(osgDB::readNodeFile(name));
 		}
 
+		//»ñÈ¡²ãÐÅÏ¢
+		setLayerList();
+
 		setStatusText(fileName);
 	});
 
 	connect(closeAction, &QAction::triggered, [=]() {
 		_viewerWidget->removeScene();
 		setStatusText("");
+		clearLayerList();
 	});
 
 
@@ -92,35 +98,32 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 	});
 
 
-	//QToolBar* toolBar = new QToolBar(this);
-	//addToolBar(Qt::LeftToolBarArea, toolBar);
-	//toolBar->setFloatable(false);
-	//QPushButton* btn_move = new QPushButton("Move", this);
-	//QPushButton* btn_rotate = new QPushButton("Rotate", this);
-	//QPushButton* btn_scale = new QPushButton("Scale", this);
-	//toolBar->addWidget(btn_move);
-	//toolBar->addWidget(btn_rotate);
-	//toolBar->addWidget(btn_scale);
 
+	//Ðü¸¡À¸
+	QToolBar* toolBar = new QToolBar(this);
+	this->addToolBar(Qt::LeftToolBarArea, toolBar);
+	toolBar->setFloatable(false);
 
+	_treeWidget = new TreeWidget;
+	toolBar->setAllowedAreas(Qt::LeftToolBarArea | Qt::RightToolBarArea);
+	toolBar->addWidget(_treeWidget);
 
-	//×´Ì¬À¸
+	//×ó×´Ì¬À¸£¨ÎÄ¼þÃû£©
 	QStatusBar* status = statusBar();
 	setStatusBar(status);
 	label_L = new QLabel("");
 	status->addWidget(label_L);
 
+	//ÓÒ×´Ì¬À¸£¨½ø¶È£©
 	//QLabel* label_L = new QLabel(tr("left info"));
 	//status->addWidget(label_L);
 	//QLabel* label_R = new QLabel("right info");
 	//status->addPermanentWidget(label_R);
 
 
-	osgQt::GraphicsWindowQt* gw = createGraphicsWindow(50, 50, 640, 480);
-	osg::Node* scene = osgDB::readNodeFile("cow.osg");
-
+	osgQt::GraphicsWindowQt* gw = createGraphicsWindow(0,0,0,0);
 	_viewerWidget = new ViewerWidget(gw);
-	_viewerWidget->setGeometry(100, 100, 800, 600);
+	//_viewerWidget->setGeometry(100, 100, 800, 600);
 
 	_viewerWidget->setParent(this);
 	this->setCentralWidget(_viewerWidget);
@@ -136,5 +139,19 @@ MainWindow::~MainWindow()
 void MainWindow::setStatusText(QString str)
 {
 	label_L->setText(str);
+}
+
+
+void MainWindow::setLayerList()
+{
+	clearLayerList();
+	int layerCount = _viewerWidget->getLayerCount();
+	//qDebug() << layerCount << endl;
+	_treeWidget->changeItem(layerCount);
+}
+
+void MainWindow::clearLayerList()
+{
+	_treeWidget->changeItem(0);
 }
 

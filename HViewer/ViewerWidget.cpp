@@ -14,6 +14,14 @@ ViewerWidget::ViewerWidget(osgQt::GraphicsWindowQt* gw) : QWidget(), _gw(gw), _s
 	//osg::ref_ptr<PickHandler> picker = new PickHandler;
 	//_root->addChild(picker->getOrCreateSelectionBox());
 	//_viewer->addEventHandler(picker.get());
+
+	QVBoxLayout* layout = new QVBoxLayout;
+	layout->addWidget(_gw->getGLWidget());
+	setLayout(layout);
+	layout->setContentsMargins(1, 1, 1, 1);
+
+	connect(&_timer, SIGNAL(timeout()), this, SLOT(update()));
+	_timer.start(10);
 }
 
 
@@ -47,15 +55,8 @@ void ViewerWidget::setScene(osg::Node* root)
 
 	_pathPickHandler = new PathPickHandler(_viewer);
 	_viewer->addEventHandler(_pathPickHandler);
-
-	QVBoxLayout* layout = new QVBoxLayout;
-	layout->addWidget(_gw->getGLWidget());
-	setLayout(layout);
-	layout->setContentsMargins(1, 1, 1, 1);
-
-	connect(&_timer, SIGNAL(timeout()), this, SLOT(update()));
-	_timer.start(10);
 }
+
 
 void ViewerWidget::removeScene()
 {
@@ -69,6 +70,7 @@ void ViewerWidget::removeOperation()
 	_viewer->setCameraManipulator(new osgGA::TrackballManipulator);
 }
 
+
 void ViewerWidget::changeToLineMode()
 {
 	_viewer->getSceneData()->asGroup()->getOrCreateStateSet()
@@ -81,3 +83,23 @@ void ViewerWidget::changeToSurfaceMode()
 		->setAttributeAndModes(new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::FILL));
 }
 
+
+void ViewerWidget::switchLayer(int index, bool targetStatus)
+{
+	_viewer->getSceneData()->asGroup()->getChild(index)->asSwitch()
+		->setValue(0, targetStatus);
+}
+
+void ViewerWidget::switchAllLayer(bool targetStatus)
+{
+	int num = _viewer->getSceneData()->asGroup()->getNumChildren();
+	for (size_t i = 0; i < num; i++)
+	{
+		switchLayer(i, targetStatus);
+	}
+}
+
+int ViewerWidget::getLayerCount()
+{
+	return _scene->asGroup()->getNumChildren();
+}

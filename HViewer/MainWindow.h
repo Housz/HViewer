@@ -13,6 +13,7 @@
 #include <QFileDialog>
 
 #include "ViewerWidget.h"
+#include "treeWidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -26,4 +27,8 @@ public:
 private:
 	ViewerWidget* _viewerWidget;
 	QLabel* label_L;
+	TreeWidget* _treeWidget;
+
+	void setLayerList();
+	void clearLayerList();
 };
