@@ -57,6 +57,11 @@ void ViewerWidget::setScene(osg::Node* root)
 	_viewer->addEventHandler(_pathPickHandler);
 }
 
+osg::Node* ViewerWidget::getScene()
+{
+	return _scene;
+}
+
 
 void ViewerWidget::removeScene()
 {

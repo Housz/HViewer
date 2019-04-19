@@ -29,6 +29,6 @@ private:
 	QLabel* label_L;
 	TreeWidget* _treeWidget;
 
-	void setLayerList();
-	void clearLayerList();
+	void setLayerList(osg::Group*);
+	void initLayerList(osg::Group*);
 };

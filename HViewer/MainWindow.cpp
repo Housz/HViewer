@@ -74,10 +74,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 		if (!fileName.isEmpty())
 		{
 			_viewerWidget->setScene(osgDB::readNodeFile(name));
-		}
 
-		//获取层信息
-		setLayerList();
+			//获取层信息
+
+			setLayerList(_viewerWidget->getScene()->asGroup());
+		}
 
 		setStatusText(fileName);
 	});
@@ -85,7 +86,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 	connect(closeAction, &QAction::triggered, [=]() {
 		_viewerWidget->removeScene();
 		setStatusText("");
-		clearLayerList();
+		initLayerList(NULL);
 	});
 
 
@@ -142,16 +143,21 @@ void MainWindow::setStatusText(QString str)
 }
 
 
-void MainWindow::setLayerList()
+void MainWindow::setLayerList(osg::Group* scene)
 {
-	clearLayerList();
+	initLayerList(scene);
+
 	int layerCount = _viewerWidget->getLayerCount();
-	//qDebug() << layerCount << endl;
 	_treeWidget->changeItem(layerCount);
 }
 
-void MainWindow::clearLayerList()
+void MainWindow::initLayerList(osg::Group* scene)
 {
+	if (scene)
+	{
+		_treeWidget->setScene(scene);
+	}
+	
 	_treeWidget->changeItem(0);
 }
 

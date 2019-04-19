@@ -6,6 +6,9 @@
 #include <QLayout>
 #include <QVector>
 
+#include <osg/Switch>
+#include <osg/Group>
+
 class TreeWidget : public QWidget
 {
 	Q_OBJECT
@@ -14,17 +17,22 @@ public:
 	TreeWidget();
 	~TreeWidget();
 
+	void setScene(osg::Group*);
 	void changeItem(int);
 
 private slots:
 	void updateItem(QTreeWidgetItem* item, int column);
 
 private:
-	QTreeWidgetItem* root;
-	QTreeWidget * tree;
-	QVector<QTreeWidgetItem*> itemList;
+	QTreeWidgetItem* _root;
+	QTreeWidget* _tree;
+	QVector<QTreeWidgetItem*> _itemList;
+
+	osg::Group* _scene;
 
 	void createItem(int);
+
+	void changeSwitchState(int, bool);
 
 	void updateRootItem();
 };

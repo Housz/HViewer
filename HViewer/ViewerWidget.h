@@ -23,6 +23,8 @@ public:
 	~ViewerWidget();
 
 	void setScene(osg::Node*);
+	osg::Node* getScene();
+
 	void removeScene();
 	void removeOperation();
 	void changeToLineMode();
