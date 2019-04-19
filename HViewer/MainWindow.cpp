@@ -69,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 		std::string name = code->fromUnicode(fileName).data();
 
-		qDebug() << fileName;
+		QFileInfo fileinfo = QFileInfo(fileName);
 
 		if (!fileName.isEmpty())
 		{
@@ -77,7 +77,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 			//获取层信息
 
-			setLayerList(_viewerWidget->getScene()->asGroup());
+			if (fileinfo.suffix() == "3dt")
+			{
+				setLayerList(_viewerWidget->getScene()->asGroup());
+			}
+			else
+			{
+				initLayerList(NULL);
+			}
 		}
 
 		setStatusText(fileName);

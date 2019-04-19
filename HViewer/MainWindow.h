@@ -11,6 +11,7 @@
 #include <QTextEdit>
 #include <QDebug>
 #include <QFileDialog>
+#include <QFileInfo>
 
 #include "ViewerWidget.h"
 #include "treeWidget.h"
