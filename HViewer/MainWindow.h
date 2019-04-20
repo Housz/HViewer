@@ -12,6 +12,7 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QAction>
 
 #include "ViewerWidget.h"
 #include "treeWidget.h"
@@ -28,6 +29,8 @@ public:
 private:
 	ViewerWidget* _viewerWidget;
 	QLabel* label_L;
+
+	QToolBar* _toolBar;
 	TreeWidget* _treeWidget;
 
 	void setLayerList(osg::Group*);

@@ -39,9 +39,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 	QAction* surfaceAction = modeMenu->addAction("Surface");
 	QAction* lineAction = modeMenu->addAction("Line");
 
+	QMenu* layerMenu = bar->addMenu("Layer");
+	QAction* layerAction = layerMenu->addAction("Show Layer");
+
 	QMenu* helpMenu = bar->addMenu("Help");
 	QAction* aboutAction = helpMenu->addAction("About");
 
+	//connect(aboutAction, &QAction::triggered, [=]() {
+	//	_toolBar->setVisible(false);
+	//});
 
 	connect(homeAction, &QAction::triggered, [=]() {
 		_viewerWidget->removeOperation();
@@ -108,13 +114,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 
 	//Ğü¸¡À¸
-	QToolBar* toolBar = new QToolBar(this);
-	this->addToolBar(Qt::LeftToolBarArea, toolBar);
-	toolBar->setFloatable(false);
+	_toolBar = new QToolBar(this);
+	this->addToolBar(Qt::LeftToolBarArea, _toolBar);
+	_toolBar->setFloatable(false);
 
+	//²àÀ¸
 	_treeWidget = new TreeWidget;
-	toolBar->setAllowedAreas(Qt::LeftToolBarArea | Qt::RightToolBarArea);
-	toolBar->addWidget(_treeWidget);
+	_toolBar->setAllowedAreas(Qt::LeftToolBarArea | Qt::RightToolBarArea);
+	_toolBar->addWidget(_treeWidget);
+
 
 	//×ó×´Ì¬À¸£¨ÎÄ¼şÃû£©
 	QStatusBar* status = statusBar();
