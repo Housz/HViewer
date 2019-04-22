@@ -1,5 +1,5 @@
-# A 3D model viewer based on OpenSceneGraph 3.6.3 and QT 5 
-Visual Studio 2017
+# A 3D model viewer based on OpenSceneGraph 3 and QT 5 
+OpenSceneGraph 3.6.3, QT 5.11.2, Visual Studio 2017
 
 
 ## to-do list:
@@ -13,6 +13,7 @@ Visual Studio 2017
 * select and highlight a model (connect to treeWidget)
 * section (dynamic)
 * path animation(default/customize path)
+* capture
 
 **UI**:
 * ~~floatable toolbar(tree widget)~~
@@ -21,5 +22,5 @@ Visual Studio 2017
 * add icon
 
 ## bug
+* ~~low frame rate due to massive data~~
 * z-fighting
-* 
