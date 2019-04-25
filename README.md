@@ -9,8 +9,7 @@ OpenSceneGraph 3.6.3, QT 5.11.2, Visual Studio 2017
 * ~~open/close model file(.obj .osg .3dt)~~
 * ~~reset model~~
 * ~~surface mode/line mode~~
-* 
-* select and highlight a model (connect to treeWidget)
+* pick and highlight a model (connect to treeWidget)
 * section (dynamic)
 * path animation(default/customize path)
 * capture

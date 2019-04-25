@@ -14,7 +14,42 @@
 #include <osg/PolygonOffset>
 #include <osgQt/GraphicsWindowQt>
 
+#include <osgManipulator/TabBoxDragger>
+#include <osgManipulator/TabBoxTrackballDragger>
+#include <osgManipulator/TabPlaneDragger>
+#include <osgManipulator/TabPlaneTrackballDragger>
+#include <osgManipulator/Scale1DDragger>
+#include <osgManipulator/Scale2DDragger>
+#include <osgManipulator/TrackballDragger>
+#include <osgManipulator/Translate1DDragger>
+#include <osgManipulator/Translate2DDragger>
+#include <osgManipulator/TranslateAxisDragger>
+#include <osgManipulator/TranslatePlaneDragger>
+#include <osgManipulator/RotateCylinderDragger>
+#include <osgManipulator/AntiSquish>
+
+#include <osg/ShapeDrawable>
+#include <osg/MatrixTransform>
+#include <osg/Geometry>
+#include <osg/Material>
+#include <osg/io_utils>
+#include <osg/ComputeBoundsVisitor>
+#include <osg/MatrixTransform>
+#include <osg/ClipNode>
+#include <osg/Billboard>
+#include <osg/Geode>
+#include <osg/Group>
+#include <osg/Notify>
+#include <osg/Material>
+#include <osg/PolygonOffset>
+#include <osg/PolygonMode>
+#include <osg/LineStipple>
+#include <osg/AnimationPath>
+
 #include "pickHandler.h"
+
+#include "ClipCallback.h"
+
 
 
 class ViewerWidget : public QWidget
@@ -36,6 +71,10 @@ public:
 
 	int getLayerCount();
 
+	void createClipDragger();
+	void removeClipDragger();
+	void clearClip();
+
 protected:	
 	QTimer _timer;
 
@@ -54,5 +93,21 @@ protected:
 		_viewer->frame();
 	}
 
+public:
+	osg::Node* addDraggerToBox(osg::Node* box);
+
+	osg::Transform* createClipBoxToScene(osg::Node* scene);
+
+
+protected:
+	// dragger for clipping
+	osg::ref_ptr<osg::Geode> _boundingBox;
+	osg::ref_ptr<osg::ShapeDrawable> _shape;
+
+	osg::ref_ptr<osg::Transform> _clipTransform;
+
+	osg::ref_ptr<osg::Transform> _boxTransform;
+
+	ClipCallback* _clipCallback;
 };
 

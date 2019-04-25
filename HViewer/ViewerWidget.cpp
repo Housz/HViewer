@@ -8,7 +8,8 @@ ViewerWidget::ViewerWidget(osgQt::GraphicsWindowQt* gw) : QWidget(), _gw(gw), _s
 	setScene(NULL);
 	//_viewer->setSceneData(osgDB::readNodeFile("C:\\Users\\Housz\\Desktop\\obj\\test.3dt"));
 
-	//_root = new osg::Group;
+	_root = new osg::Group;
+	_clipCallback = NULL;
 	//_root->addChild(_scene);
 
 	//osg::ref_ptr<PickHandler> picker = new PickHandler;
@@ -37,7 +38,12 @@ void ViewerWidget::setScene(osg::Node* root)
 	if (root)
 	{
 		_scene = root;
-		_viewer->setSceneData(_scene);
+
+		_root->removeChild(0, _root->getNumChildren());
+
+		_root->addChild(_scene);
+
+		_viewer->setSceneData(_root);
 	}
 
 	const osg::GraphicsContext::Traits* traits = _gw->getTraits();
@@ -67,6 +73,8 @@ void ViewerWidget::removeScene()
 {
 	_scene = NULL;
 	_viewer->setSceneData(NULL);
+
+	//removeClipDragger();
 }
 
 void ViewerWidget::removeOperation()
@@ -107,4 +115,119 @@ void ViewerWidget::switchAllLayer(bool targetStatus)
 int ViewerWidget::getLayerCount()
 {
 	return _scene->asGroup()->getNumChildren();
+}
+
+
+osg::Node * ViewerWidget::addDraggerToBox(osg::Node * box)
+{
+	osg::ref_ptr<osg::Group> root = new osg::Group;
+
+	box->getOrCreateStateSet()->setMode(GL_NORMALIZE, osg::StateAttribute::ON);
+
+	osg::MatrixTransform* transform = new osg::MatrixTransform;
+	transform->addChild(box);
+
+	osgManipulator::Dragger* dragger = new osgManipulator::TabBoxDragger();
+	dragger->setupDefaultGeometry();
+
+	root->addChild(transform);
+	root->addChild(dragger);
+
+	osg::ComputeBoundsVisitor boundvisitor;
+	box->accept(boundvisitor);
+	osg::BoundingBox bb = boundvisitor.getBoundingBox();
+
+	double x = bb.xMax() - bb.xMin();
+	double y = bb.yMax() - bb.yMin();
+	double z = bb.zMax() - bb.zMin();
+	osg::Vec3 center = osg::Vec3((bb.xMax() + bb.xMin()) / 2, (bb.yMax() + bb.yMin()) / 2, (bb.zMax() + bb.zMin()) / 2);
+
+	//const double scale = 1.155;
+	const double offset = 0.001;
+	dragger->setMatrix(osg::Matrix::scale(x + offset, y + offset, z + offset) * osg::Matrix::translate(center));
+
+	dragger->addTransformUpdating(transform);
+	dragger->setHandleEvents(true);
+
+	dragger->setActivationModKeyMask(osgGA::GUIEventAdapter::MODKEY_CTRL);
+	dragger->setActivationKeyEvent('a');
+
+	return root.release();
+}
+
+osg::Transform * ViewerWidget::createClipBoxToScene(osg::Node * scene)
+{
+	_boundingBox = new osg::Geode;
+	osg::ref_ptr<osg::MatrixTransform> transform = new osg::MatrixTransform;
+
+	osg::ComputeBoundsVisitor boundvisitor;
+	scene->accept(boundvisitor);
+	osg::BoundingBox bb = boundvisitor.getBoundingBox();
+
+	double x = bb.xMax() - bb.xMin();
+	double y = bb.yMax() - bb.yMin();
+	double z = bb.zMax() - bb.zMin();
+	osg::Vec3 center = osg::Vec3((bb.xMax() + bb.xMin()) / 2, (bb.yMax() + bb.yMin()) / 2, (bb.zMax() + bb.zMin()) / 2);
+
+	_shape = new osg::ShapeDrawable(new osg::Box(center, x, y, z));
+	_shape->setColor(osg::Vec4(0.5f, 0.5f, 0.7f, 0.3f));
+	_shape->getOrCreateStateSet()->setMode(GL_BLEND, osg::StateAttribute::ON);//ÉèÖÃÍ¸Ã÷¶È
+
+	_boundingBox->addDrawable(_shape.get());
+
+	transform->addChild(addDraggerToBox(_boundingBox.get()));
+
+	return transform.release();
+}
+
+
+void ViewerWidget::createClipDragger()
+{
+	if (_root->getNumChildren() == 1)
+	{
+		_clipTransform = new osg::Transform;
+		_root->addChild(_clipTransform);
+
+		_boxTransform = createClipBoxToScene(_scene);
+		_root->addChild(_boxTransform);
+
+		if (_clipCallback)
+		{
+			_scene->removeUpdateCallback(_clipCallback);
+		}
+
+		_clipCallback = new ClipCallback(_clipTransform, _boxTransform);
+		_scene->setUpdateCallback(_clipCallback);
+	}
+	else
+	{
+		return;
+	}
+}
+
+void ViewerWidget::removeClipDragger()
+{
+	if (_root->getNumChildren() > 1)
+	{
+		_scene->removeUpdateCallback(_clipCallback);
+		/*_root->removeChild(_root->getChildIndex(_boxTransform));
+		_root->removeChild(_root->getChildIndex(_clipTransform));*/
+
+		_root->removeChild(1, _root->getNumChildren() - 1);
+
+		_boundingBox = NULL;
+		_shape = NULL;
+		_clipTransform = NULL;
+		_boxTransform = NULL;
+	}
+	else
+	{
+		return;
+	}
+}
+
+void ViewerWidget::clearClip()
+{
+	createClipDragger();
+	removeClipDragger();
 }

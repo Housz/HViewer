@@ -42,6 +42,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 	QMenu* layerMenu = bar->addMenu("Layer");
 	QAction* layerAction = layerMenu->addAction("Show Layer");
 
+	QMenu* ClipMenu = bar->addMenu("Clip");
+	QAction* addDraggerAction = ClipMenu->addAction("Clip");
+	QAction* removeDraggerAction = ClipMenu->addAction("Remove");
+	pathMenu->addSeparator();
+	QAction* clearDraggerAction = ClipMenu->addAction("Cleear");
+
 	QMenu* helpMenu = bar->addMenu("Help");
 	QAction* aboutAction = helpMenu->addAction("About");
 
@@ -111,6 +117,18 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 		_viewerWidget->changeToLineMode();
 	});
 
+
+	connect(addDraggerAction, &QAction::triggered, [=]() {
+		_viewerWidget->createClipDragger();
+	});
+
+	connect(removeDraggerAction, &QAction::triggered, [=]() {
+		_viewerWidget->removeClipDragger();
+	});
+
+	connect(clearDraggerAction, &QAction::triggered, [=]() {
+		_viewerWidget->clearClip();
+	});
 
 
 	//Ðü¸¡À¸
