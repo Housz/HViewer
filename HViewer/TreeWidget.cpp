@@ -59,11 +59,26 @@ void TreeWidget::createItem(int num)
 		_root->setHidden(false);
 	}
 
+	// get layer name
+	QVector<QString> names;
+	QFile file("./.layers");
+	file.open(QIODevice::ReadOnly | QIODevice::Text);
+	QTextStream in(&file);
+	//in.setCodec("GBK");
+	for (size_t i = 0; i < num; i++)
+	{
+		QString curr_line = in.readLine();
+		names.push_back(curr_line);
+	}
+	file.close();
+
 	for (int i = 0; i < num; i++)
 	{
 		QTreeWidgetItem* subItem = new QTreeWidgetItem(_root);
 		subItem->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-		subItem->setText(0, "subItem");
+
+		subItem->setText(0, names[i]);
+
 		subItem->setCheckState(0, Qt::Checked);
 
 		//connect(subItem, SIGNAL(itemChanged(QTreeWidgetItem*, int), );

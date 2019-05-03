@@ -63,6 +63,7 @@ public:
 
 	void removeScene();
 	void removeOperation();
+
 	void changeToLineMode();
 	void changeToSurfaceMode();
 
@@ -74,6 +75,9 @@ public:
 	void createClipDragger();
 	void removeClipDragger();
 	void clearClip();
+
+	void createPicker();
+	void removePicker();
 
 protected:	
 	QTimer _timer;

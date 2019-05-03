@@ -29,11 +29,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 
 	QMenu* pathMenu = bar->addMenu("Path");
-	QAction* palyAction = pathMenu->addAction("Play");
-	QAction* recordAction = pathMenu->addAction("Record");
-	pathMenu->addSeparator();
-	QAction* openPathAction = pathMenu->addAction("Open Path");
-	QAction* savePathAction = pathMenu->addAction("Save Path");
+	QAction* palyAction = pathMenu->addAction("Add");
+	QAction* recordAction = pathMenu->addAction("Remove");
+	//pathMenu->addSeparator();
+	//QAction* openPathAction = pathMenu->addAction("Open Path");
+	//QAction* savePathAction = pathMenu->addAction("Save Path");
 
 	QMenu* modeMenu = bar->addMenu("Mode");
 	QAction* surfaceAction = modeMenu->addAction("Surface");

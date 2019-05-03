@@ -60,7 +60,6 @@ void ViewerWidget::setScene(osg::Node* root)
 	_viewer->setThreadingModel(osgViewer::Viewer::SingleThreaded);
 
 	_pathPickHandler = new PathPickHandler(_viewer);
-	_viewer->addEventHandler(_pathPickHandler);
 }
 
 osg::Node* ViewerWidget::getScene()
@@ -150,7 +149,7 @@ osg::Node * ViewerWidget::addDraggerToBox(osg::Node * box)
 	dragger->setHandleEvents(true);
 
 	dragger->setActivationModKeyMask(osgGA::GUIEventAdapter::MODKEY_CTRL);
-	dragger->setActivationKeyEvent('a');
+	//dragger->setActivationKeyEvent('a');
 
 	return root.release();
 }
@@ -210,10 +209,11 @@ void ViewerWidget::removeClipDragger()
 	if (_root->getNumChildren() > 1)
 	{
 		_scene->removeUpdateCallback(_clipCallback);
-		/*_root->removeChild(_root->getChildIndex(_boxTransform));
-		_root->removeChild(_root->getChildIndex(_clipTransform));*/
 
-		_root->removeChild(1, _root->getNumChildren() - 1);
+		_root->removeChild(_root->getChildIndex(_boxTransform));
+		_root->removeChild(_root->getChildIndex(_clipTransform));
+
+		//_root->removeChild(1, _root->getNumChildren() - 1);
 
 		_boundingBox = NULL;
 		_shape = NULL;
@@ -228,6 +228,18 @@ void ViewerWidget::removeClipDragger()
 
 void ViewerWidget::clearClip()
 {
-	createClipDragger();
-	removeClipDragger();
+	_root->removeChild(0, _root->getNumChildren());
+
+	_root->addChild(_scene);
+}
+
+
+void ViewerWidget::createPicker()
+{
+	_viewer->addEventHandler(_pathPickHandler);
+}
+
+void ViewerWidget::removePicker()
+{
+	_viewer->removeEventHandler(_pathPickHandler);
 }

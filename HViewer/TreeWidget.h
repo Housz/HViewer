@@ -5,6 +5,9 @@
 #include <QCheckBox>
 #include <QLayout>
 #include <QVector>
+#include <QFile>
+#include <QTextStream>
+#include <QDebug>
 
 #include <osg/Switch>
 #include <osg/Group>
