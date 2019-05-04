@@ -17,7 +17,7 @@ OpenSceneGraph 3.6.3, QT 5.11.2, Visual Studio 2017
 
 **UI**:
 * ~~floatable toolbar(tree widget)~~
-* control toolBar to show/hide
+* ~~control toolBar to show/hide~~
 * add buttons
 * add icon
 

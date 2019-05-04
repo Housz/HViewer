@@ -40,7 +40,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 	QAction* lineAction = modeMenu->addAction("Line");
 
 	QMenu* layerMenu = bar->addMenu("Layer");
-	QAction* layerAction = layerMenu->addAction("Show Layer");
+	QAction* showlayerAction = layerMenu->addAction("Show Layers");
+	QAction* hidelayerAction = layerMenu->addAction("Hide Layers");
 
 	QMenu* ClipMenu = bar->addMenu("Clip");
 	QAction* addDraggerAction = ClipMenu->addAction("Clip");
@@ -92,10 +93,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 			if (fileinfo.suffix() == "3dt")
 			{
 				setLayerList(_viewerWidget->getScene()->asGroup());
+				_toolBar->show();
 			}
 			else
 			{
 				initLayerList(NULL);
+				_toolBar->hide();
 			}
 		}
 
@@ -128,6 +131,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 	connect(clearDraggerAction, &QAction::triggered, [=]() {
 		_viewerWidget->clearClip();
+	});
+
+	connect(showlayerAction, &QAction::triggered, [=]() {
+		_toolBar->show();
+	});
+
+	connect(hidelayerAction, &QAction::triggered, [=]() {
+		_toolBar->hide();
 	});
 
 
