@@ -25,6 +25,7 @@ public:
 
 private slots:
 	void updateItem(QTreeWidgetItem* item, int column);
+	//void highLightItem(QTreeWidgetItem* item, int column);
 
 private:
 	QTreeWidgetItem* _root;

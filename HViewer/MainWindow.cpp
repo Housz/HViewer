@@ -15,8 +15,36 @@ osgQt::GraphicsWindowQt* createGraphicsWindow(int x, int y, int w, int h)
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
+	//¹¤¾ßÀ¸
+	auto _toolbar = addToolBar(tr(""));
+
+
+	//Ðü¸¡À¸
+	_treeToolBar = new QToolBar(this);
+	this->addToolBar(Qt::LeftToolBarArea, _treeToolBar);
+	_treeToolBar->setFloatable(false);
+	//²àÀ¸£¨²ãÊ÷£©
+	_treeWidget = new TreeWidget;
+	_treeToolBar->setAllowedAreas(Qt::LeftToolBarArea | Qt::RightToolBarArea);
+	_treeToolBar->addWidget(_treeWidget);
+
+
+	//×ó×´Ì¬À¸£¨ÎÄ¼þÃû£©
+	QStatusBar* status = statusBar();
+	setStatusBar(status);
+	label_L = new QLabel("");
+	status->addWidget(label_L);
+
+	//ÓÒ×´Ì¬À¸£¨½ø¶È£©
+	//QLabel* label_L = new QLabel(tr("left info"));
+	//status->addWidget(label_L);
+	//QLabel* label_R = new QLabel("right info");
+	//status->addPermanentWidget(label_R);
+
+
+
 	QMenuBar *bar = menuBar();
-	QMenu* fileMenu = bar->addMenu("File");
+	QMenu* fileMenu = bar->addMenu(tr("File"));
 	setMenuBar(bar);
 	QAction* openAction = fileMenu->addAction("Open");
 	//fileMenu->addSeparator();
@@ -26,7 +54,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 	QAction* closeAction = fileMenu->addAction("Close");
 	fileMenu->addSeparator();
 	QAction* homeAction = fileMenu->addAction("Home");
-
 
 	QMenu* pathMenu = bar->addMenu("Path");
 	QAction* palyAction = pathMenu->addAction("Add");
@@ -93,12 +120,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 			if (fileinfo.suffix() == "3dt")
 			{
 				setLayerList(_viewerWidget->getScene()->asGroup());
-				_toolBar->show();
+				_treeToolBar->show();
 			}
 			else
 			{
 				initLayerList(NULL);
-				_toolBar->hide();
+				_treeToolBar->hide();
 			}
 		}
 
@@ -134,36 +161,26 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 	});
 
 	connect(showlayerAction, &QAction::triggered, [=]() {
-		_toolBar->show();
+		_treeToolBar->show();
 	});
 
 	connect(hidelayerAction, &QAction::triggered, [=]() {
-		_toolBar->hide();
+		_treeToolBar->hide();
 	});
 
 
-	//Ðü¸¡À¸
-	_toolBar = new QToolBar(this);
-	this->addToolBar(Qt::LeftToolBarArea, _toolBar);
-	_toolBar->setFloatable(false);
 
-	//²àÀ¸
-	_treeWidget = new TreeWidget;
-	_toolBar->setAllowedAreas(Qt::LeftToolBarArea | Qt::RightToolBarArea);
-	_toolBar->addWidget(_treeWidget);
+	//QPushButton *btn = new QPushButton(_toolBar);
+	
+
+	QStyle* style = QApplication::style();
+	QIcon icon = style->standardIcon(QStyle::SP_FileIcon);
+	openAction->setIcon(icon);
+	//btn->setIcon(icon);
 
 
-	//×ó×´Ì¬À¸£¨ÎÄ¼þÃû£©
-	QStatusBar* status = statusBar();
-	setStatusBar(status);
-	label_L = new QLabel("");
-	status->addWidget(label_L);
-
-	//ÓÒ×´Ì¬À¸£¨½ø¶È£©
-	//QLabel* label_L = new QLabel(tr("left info"));
-	//status->addWidget(label_L);
-	//QLabel* label_R = new QLabel("right info");
-	//status->addPermanentWidget(label_R);
+	icon = style->standardIcon(QStyle::SP_MessageBoxCritical);
+	closeAction->setIcon(icon);
 
 
 	osgQt::GraphicsWindowQt* gw = createGraphicsWindow(0,0,0,0);
@@ -172,6 +189,18 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 	_viewerWidget->setParent(this);
 	this->setCentralWidget(_viewerWidget);
+
+	
+	//_toolbar
+	_toolbar->addAction(openAction);
+	_toolbar->addAction(closeAction);
+
+
+
+
+
+
+
 
 	this->resize(1366, 768);
 }

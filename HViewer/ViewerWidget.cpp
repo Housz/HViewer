@@ -16,7 +16,7 @@ ViewerWidget::ViewerWidget(osgQt::GraphicsWindowQt* gw) : QWidget(), _gw(gw), _s
 	//_root->addChild(picker->getOrCreateSelectionBox());
 	//_viewer->addEventHandler(picker.get());
 
-	QVBoxLayout* layout = new QVBoxLayout;
+	QHBoxLayout* layout = new QHBoxLayout;
 	layout->addWidget(_gw->getGLWidget());
 	setLayout(layout);
 	layout->setContentsMargins(1, 1, 1, 1);

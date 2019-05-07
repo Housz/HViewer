@@ -24,6 +24,8 @@ TreeWidget::TreeWidget()
 	layout->addWidget(_tree);
 	layout->setMargin(0);
 	setLayout(layout);
+
+	//connect(_tree, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(highLightItem(QTreeWidgetItem*, int)));
 }
 
 
@@ -47,6 +49,7 @@ void TreeWidget::changeItem(int num)
 
 	createItem(num);
 }
+
 
 void TreeWidget::createItem(int num)
 {
@@ -187,3 +190,9 @@ void TreeWidget::updateRootItem()
 		_root->setCheckState(0, Qt::PartiallyChecked);
 	}
 }
+
+
+//void TreeWidget::highLightItem(QTreeWidgetItem * item, int column)
+//{
+//
+//}

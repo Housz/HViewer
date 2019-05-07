@@ -13,9 +13,17 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QAction>
+#include <QIcon>
+#include <QApplication>
+#include <QDockWidget>
 
 #include "ViewerWidget.h"
 #include "treeWidget.h"
+#include "topToolBar.h"
+
+#if _MSC_VER >= 1600  
+#pragma execution_character_set("utf-8")
+#endif
 
 class MainWindow : public QMainWindow
 {
@@ -30,8 +38,11 @@ private:
 	ViewerWidget* _viewerWidget;
 	QLabel* label_L;
 
-	QToolBar* _toolBar;
+	QToolBar* _treeToolBar;
 	TreeWidget* _treeWidget;
+
+	QToolBar* _toolBar;
+
 
 	void setLayerList(osg::Group*);
 	void initLayerList(osg::Group*);
