@@ -85,14 +85,20 @@ void ViewerWidget::removeOperation()
 
 void ViewerWidget::changeToLineMode()
 {
-	_viewer->getSceneData()->asGroup()->getOrCreateStateSet()
-		->setAttributeAndModes(new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE));
+	if (_scene)
+	{
+		_viewer->getSceneData()->asGroup()->getOrCreateStateSet()
+			->setAttributeAndModes(new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE));
+	}
 }
 
 void ViewerWidget::changeToSurfaceMode()
 {
-	_viewer->getSceneData()->asGroup()->getOrCreateStateSet()
-		->setAttributeAndModes(new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::FILL));
+	if (_scene)
+	{
+		_viewer->getSceneData()->asGroup()->getOrCreateStateSet()
+			->setAttributeAndModes(new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::FILL));
+	}
 }
 
 
@@ -242,4 +248,10 @@ void ViewerWidget::createPicker()
 void ViewerWidget::removePicker()
 {
 	_viewer->removeEventHandler(_pathPickHandler);
+}
+
+void ViewerWidget::setBackColor(int r, int g, int b)
+{
+	osg::Camera* camera = _viewer->getCamera();
+	camera->setClearColor(osg::Vec4(r, g, b, 1.0));
 }

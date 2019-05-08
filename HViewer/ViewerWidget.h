@@ -79,6 +79,8 @@ public:
 	void createPicker();
 	void removePicker();
 
+	void setBackColor(int r, int g, int b);
+
 protected:	
 	QTimer _timer;
 

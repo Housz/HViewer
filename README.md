@@ -10,7 +10,7 @@ OpenSceneGraph 3.6.3, QT 5.11.2, Visual Studio 2017
 * ~~reset model~~
 * ~~surface mode/line mode~~
 * pick and highlight a model (connect to treeWidget)
-* section (dynamic)
+* ~~section (dynamic)~~
 * path animation(default/customize path)
 * capture
 * switch illumination
@@ -18,9 +18,10 @@ OpenSceneGraph 3.6.3, QT 5.11.2, Visual Studio 2017
 **UI**:
 * ~~floatable toolbar(tree widget)~~
 * ~~control toolBar to show/hide~~
+* ~~toolbar~~
 * shortcuts
-* toolbar
 * icon
+* background color
 * language switch
 
 ## bug

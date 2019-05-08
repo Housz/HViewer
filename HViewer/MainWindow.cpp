@@ -16,8 +16,8 @@ osgQt::GraphicsWindowQt* createGraphicsWindow(int x, int y, int w, int h)
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
 	//¹¤¾ßÀ¸
-	auto _toolbar = addToolBar(tr(""));
-
+	_toolBar = addToolBar(tr(""));
+	_toolBar->setAllowedAreas(Qt::TopToolBarArea);
 
 	//Ðü¸¡À¸
 	_treeToolBar = new QToolBar(this);
@@ -43,53 +43,57 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 
 
-	QMenuBar *bar = menuBar();
-	QMenu* fileMenu = bar->addMenu(tr("File"));
-	setMenuBar(bar);
+	QMenuBar *menuBar = new QMenuBar();
+	QMenu* fileMenu = menuBar->addMenu(tr("File"));
+	setMenuBar(menuBar);
 	QAction* openAction = fileMenu->addAction("Open");
 	//fileMenu->addSeparator();
 	//QAction* saveAction = fileMenu->addAction("Save");
 	//QAction* saveasAction = fileMenu->addAction("Save as");
-	fileMenu->addSeparator();
 	QAction* closeAction = fileMenu->addAction("Close");
 	fileMenu->addSeparator();
-	QAction* homeAction = fileMenu->addAction("Home");
+	QAction* resetAction = fileMenu->addAction("Reset");
+	fileMenu->addSeparator();
+	QAction* captureAction = fileMenu->addAction("Capture");
 
-	QMenu* pathMenu = bar->addMenu("Path");
+	QMenu* pathMenu = menuBar->addMenu("Path");
 	QAction* palyAction = pathMenu->addAction("Add");
 	QAction* recordAction = pathMenu->addAction("Remove");
 	//pathMenu->addSeparator();
 	//QAction* openPathAction = pathMenu->addAction("Open Path");
 	//QAction* savePathAction = pathMenu->addAction("Save Path");
 
-	QMenu* modeMenu = bar->addMenu("Mode");
+	QMenu* modeMenu = menuBar->addMenu("Mode");
 	QAction* surfaceAction = modeMenu->addAction("Surface");
 	QAction* lineAction = modeMenu->addAction("Line");
 
-	QMenu* layerMenu = bar->addMenu("Layer");
-	QAction* showlayerAction = layerMenu->addAction("Show Layers");
-	QAction* hidelayerAction = layerMenu->addAction("Hide Layers");
-
-	QMenu* ClipMenu = bar->addMenu("Clip");
+	QMenu* ClipMenu = menuBar->addMenu("Clip");
 	QAction* addDraggerAction = ClipMenu->addAction("Clip");
 	QAction* removeDraggerAction = ClipMenu->addAction("Remove");
-	pathMenu->addSeparator();
-	QAction* clearDraggerAction = ClipMenu->addAction("Cleear");
+	ClipMenu->addSeparator();
+	QAction* clearDraggerAction = ClipMenu->addAction("Clear");
 
-	QMenu* helpMenu = bar->addMenu("Help");
+	QMenu* WindowMenu = menuBar->addMenu("Window");
+	QAction* showLayerAction = WindowMenu->addAction("Show Layers");
+	QAction* hideLayerAction = WindowMenu->addAction("Hide Layers");
+	WindowMenu->addSeparator();
+	QAction* showToolBarAction = WindowMenu->addAction("Show Tools");
+	QAction* hideToolBarAction = WindowMenu->addAction("Hide Tools");
+
+	QMenu *preMenu = menuBar->addMenu("Preferences");
+	QAction* backColorAction = preMenu->addAction("Back Color");
+	QAction* languageAction = preMenu->addAction("Language");
+
+	QMenu* helpMenu = menuBar->addMenu("Help");
 	QAction* aboutAction = helpMenu->addAction("About");
 
-	//connect(aboutAction, &QAction::triggered, [=]() {
-	//	_toolBar->setVisible(false);
-	//});
+	
 
-	connect(homeAction, &QAction::triggered, [=]() {
+	connect(resetAction, &QAction::triggered, [=]() {
 		_viewerWidget->removeOperation();
 	});
 
 	connect(aboutAction, &QAction::triggered, [=]() {
-		qDebug() << "pop dialog";
-
 		QDialog dialog(this);
 		dialog.resize(300, 200);
 		dialog.setWindowTitle(tr("about"));
@@ -138,7 +142,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 		initLayerList(NULL);
 	});
 
-
 	connect(surfaceAction, &QAction::triggered, [=]() {
 		_viewerWidget->changeToSurfaceMode();
 	});
@@ -160,28 +163,57 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 		_viewerWidget->clearClip();
 	});
 
-	connect(showlayerAction, &QAction::triggered, [=]() {
+
+	connect(showLayerAction, &QAction::triggered, [=]() {
 		_treeToolBar->show();
 	});
 
-	connect(hidelayerAction, &QAction::triggered, [=]() {
+	connect(hideLayerAction, &QAction::triggered, [=]() {
 		_treeToolBar->hide();
 	});
 
+	connect(showToolBarAction, &QAction::triggered, [=]() {
+		_toolBar->show();
+	});
+
+	connect(hideToolBarAction, &QAction::triggered, [=]() {
+		_toolBar->hide();
+	});
 
 
-	//QPushButton *btn = new QPushButton(_toolBar);
+	connect(backColorAction, &QAction::triggered, [=]() {
+		QColorDialog colorDig(this);
+		QColor c = colorDig.getRgba();
+
+		_viewerWidget->setBackColor(c.red(), c.green(), c.blue());
+	});
+
 	
-
+	//ICON
 	QStyle* style = QApplication::style();
-	QIcon icon = style->standardIcon(QStyle::SP_FileIcon);
+	QIcon icon = style->standardIcon(QStyle::SP_DirHomeIcon);
 	openAction->setIcon(icon);
-	//btn->setIcon(icon);
-
 
 	icon = style->standardIcon(QStyle::SP_MessageBoxCritical);
 	closeAction->setIcon(icon);
 
+	icon = style->standardIcon(QStyle::SP_BrowserReload);
+	resetAction->setIcon(icon);
+
+	icon = style->standardPixmap(QStyle::SP_DialogHelpButton);
+	addDraggerAction->setIcon(icon);
+
+	icon = style->standardPixmap(QStyle::SP_FileDialogListView);
+	removeDraggerAction->setIcon(icon);
+
+	QIcon lineIcon("./Resources/line_mode.ico");
+	lineAction->setIcon(lineIcon);
+	QIcon surfaceIcon("./Resources/surface_mode.ico");
+	surfaceAction->setIcon(surfaceIcon);
+	QIcon clipEnableIcon("./Resources/clip_enable.ico");
+	addDraggerAction->setIcon(clipEnableIcon);
+	QIcon clipRemoveIcon("./Resources/clip_remove.ico");
+	removeDraggerAction->setIcon(clipRemoveIcon);
 
 	osgQt::GraphicsWindowQt* gw = createGraphicsWindow(0,0,0,0);
 	_viewerWidget = new ViewerWidget(gw);
@@ -192,11 +224,20 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 	
 	//_toolbar
-	_toolbar->addAction(openAction);
-	_toolbar->addAction(closeAction);
+	_toolBar->addAction(openAction);
+	_toolBar->addAction(closeAction);
 
+	_toolBar->addAction(resetAction);
 
-
+	_toolBar->addAction(addDraggerAction);
+	_toolBar->addAction(removeDraggerAction);
+	
+	_toolBar->addAction(surfaceAction);
+	_toolBar->addAction(lineAction);
+	
+	_toolBar->insertSeparator(resetAction);
+	_toolBar->insertSeparator(addDraggerAction);
+	_toolBar->insertSeparator(surfaceAction);
 
 
 
