@@ -45,6 +45,9 @@
 #include <osg/PolygonMode>
 #include <osg/LineStipple>
 #include <osg/AnimationPath>
+#include <osg/LightSource> 
+#include <osg/Multisample>
+
 
 #include "pickHandler.h"
 

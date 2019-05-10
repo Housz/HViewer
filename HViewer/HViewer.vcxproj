@@ -146,9 +146,10 @@
     <ResourceCompile Include="HViewer.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="icon1.ico" />
-    <Image Include="icon2.ico" />
+    <Image Include="Resources\clip_enable.ico" />
+    <Image Include="Resources\clip_remove.ico" />
     <Image Include="Resources\line_mode.ico" />
+    <Image Include="Resources\logo.ico" />
     <Image Include="Resources\surface_mode.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

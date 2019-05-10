@@ -25,6 +25,25 @@ ViewerWidget::ViewerWidget(osgQt::GraphicsWindowQt* gw) : QWidget(), _gw(gw), _s
 	_timer.start(10);
 }
 
+//osg::Node* createLightSource()
+//{
+//	osg::ref_ptr<osg::Light> light = new osg::Light;
+//	light->setLightNum(0);
+//	light->setDiffuse(osg::Vec4(1.0f, 1.0f, 0.0f, 1.0f));
+//	light->setPosition(osg::Vec4(0.0f, 0.0f, 0.0f, 1.0f));
+//
+//	osg::ref_ptr<osg::LightSource> lightSource = new osg::LightSource;
+//	lightSource->setLight(light);
+//
+//	return lightSource.release();
+//
+//	osg::ref_ptr<osg::MatrixTransform> sourceTrans = new osg::MatrixTransform;
+//	sourceTrans->setMatrix(osg::Matrix::translate(osg::Vec3(-20.0f, 0.0f, 0.0f)));
+//	sourceTrans->addChild(lightSource.get());
+//
+//	return sourceTrans.release();
+//}
+
 
 ViewerWidget::~ViewerWidget()
 {
@@ -42,6 +61,9 @@ void ViewerWidget::setScene(osg::Node* root)
 		_root->removeChild(0, _root->getNumChildren());
 
 		_root->addChild(_scene);
+
+		//light
+		//_root->addChild(createLightSource());
 
 		_viewer->setSceneData(_root);
 	}

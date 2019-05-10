@@ -13,7 +13,7 @@ OpenSceneGraph 3.6.3, QT 5.11.2, Visual Studio 2017
 * ~~section (dynamic)~~
 * path animation(default/customize path)
 * capture
-* switch illumination
+* light
 
 **UI**:
 * ~~floatable toolbar(tree widget)~~

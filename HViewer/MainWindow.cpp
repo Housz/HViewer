@@ -187,7 +187,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 		_viewerWidget->setBackColor(c.red(), c.green(), c.blue());
 	});
-
+	 
 	
 	//ICON
 	QStyle* style = QApplication::style();
@@ -208,6 +208,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 	QIcon lineIcon("./Resources/line_mode.ico");
 	lineAction->setIcon(lineIcon);
+
 	QIcon surfaceIcon("./Resources/surface_mode.ico");
 	surfaceAction->setIcon(surfaceIcon);
 	QIcon clipEnableIcon("./Resources/clip_enable.ico");
