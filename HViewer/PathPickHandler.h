@@ -110,7 +110,7 @@ public:
 				{
 					osgUtil::LineSegmentIntersector::Intersections::iterator iter = inters.begin();
 
-					std::cout << iter->getWorldIntersectPoint().x() << "  " << iter->getWorldIntersectPoint().y() << std::endl;
+					//std::cout << iter->getWorldIntersectPoint().x() << "  " << iter->getWorldIntersectPoint().y() << std::endl;
 
 					osg::Vec3 tempP;
 					tempP.set(iter->getWorldIntersectPoint().x(), iter->getWorldIntersectPoint().y(), iter->getWorldIntersectPoint().z() + 20);
