@@ -57,8 +57,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 	QAction* captureAction = fileMenu->addAction("Capture");
 
 	QMenu* pathMenu = menuBar->addMenu("Path");
-	QAction* palyAction = pathMenu->addAction("Add");
-	QAction* recordAction = pathMenu->addAction("Remove");
+	QAction* addPathAction = pathMenu->addAction("Add");
+	QAction* removePathAction = pathMenu->addAction("Remove");
+	pathMenu->addSeparator();
+	QAction* playPathAction = pathMenu->addAction("Play");
+	
 	//pathMenu->addSeparator();
 	//QAction* openPathAction = pathMenu->addAction("Open Path");
 	//QAction* savePathAction = pathMenu->addAction("Save Path");
@@ -188,6 +191,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 		_viewerWidget->setBackColor(c.red(), c.green(), c.blue());
 	});
 	 
+
+	connect(addPathAction, &QAction::triggered, [=]() {
+		_viewerWidget->createPicker();
+	});
+	connect(playPathAction, &QAction::triggered, [=]() {
+		_viewerWidget->createPicker();
+	});
+	connect(removePathAction, &QAction::triggered, [=]() {
+		_viewerWidget->createPicker();
+	});
+
 	
 	//ICON
 	QStyle* style = QApplication::style();
@@ -216,6 +230,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 	QIcon clipRemoveIcon("./Resources/clip_remove.ico");
 	removeDraggerAction->setIcon(clipRemoveIcon);
 
+	QIcon addPathIcon("./Resources/path_add.ico");
+	addPathAction->setIcon(addPathIcon);
+	QIcon removePathIcon("./Resources/path_remove.ico");
+	removePathAction->setIcon(removePathIcon);
+	QIcon playPathIcon("./Resources/path_play.ico");
+	playPathAction->setIcon(playPathIcon);
+	
+
 	osgQt::GraphicsWindowQt* gw = createGraphicsWindow(0,0,0,0);
 	_viewerWidget = new ViewerWidget(gw);
 	//_viewerWidget->setGeometry(100, 100, 800, 600);
@@ -236,13 +258,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 	_toolBar->addAction(surfaceAction);
 	_toolBar->addAction(lineAction);
 	
+	_toolBar->addAction(addPathAction);
+	_toolBar->addAction(removePathAction);
+	_toolBar->addAction(playPathAction);
+
 	_toolBar->insertSeparator(resetAction);
 	_toolBar->insertSeparator(addDraggerAction);
 	_toolBar->insertSeparator(surfaceAction);
-
-
-
-
+	_toolBar->insertSeparator(addPathAction);
 
 	this->resize(1366, 768);
 }

@@ -134,12 +134,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClipCallback.h" />
-    <ClInclude Include="pickHandler.h" />
+    <ClInclude Include="PathPickHandler.h" />
     <QtMoc Include="treeWidget.h">
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtOpenGL;$(QTDIR)\include\QtWidgets</IncludePath>
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtOpenGL;$(QTDIR)\include\QtWidgets</IncludePath>
     </QtMoc>
+    <ClInclude Include="pickHandler.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SelectModelHandler.h" />
     <ClInclude Include="ViewerWidget.h" />
   </ItemGroup>
   <ItemGroup>

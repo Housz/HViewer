@@ -1,7 +1,10 @@
 # A 3D model viewer based on OpenSceneGraph 3 and QT 5 
 OpenSceneGraph 3.6.3, QT 5.11.2, Visual Studio 2017
 
+## example
 
+
+---------
 ## to-do list:
 
 **function**:
@@ -24,6 +27,7 @@ OpenSceneGraph 3.6.3, QT 5.11.2, Visual Studio 2017
 * background color
 * language switch
 
+---------
 ## bug
 * ~~low frame rate due to massive data~~
 * z-fighting

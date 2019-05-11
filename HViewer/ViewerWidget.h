@@ -49,7 +49,9 @@
 #include <osg/Multisample>
 
 
-#include "pickHandler.h"
+#include "PathPickHandler.h"
+
+#include "SelectModelHandler.h"
 
 #include "ClipCallback.h"
 

@@ -10,11 +10,6 @@ ViewerWidget::ViewerWidget(osgQt::GraphicsWindowQt* gw) : QWidget(), _gw(gw), _s
 
 	_root = new osg::Group;
 	_clipCallback = NULL;
-	//_root->addChild(_scene);
-
-	//osg::ref_ptr<PickHandler> picker = new PickHandler;
-	//_root->addChild(picker->getOrCreateSelectionBox());
-	//_viewer->addEventHandler(picker.get());
 
 	QHBoxLayout* layout = new QHBoxLayout;
 	layout->addWidget(_gw->getGLWidget());
@@ -81,6 +76,8 @@ void ViewerWidget::setScene(osg::Node* root)
 	_viewer->setCameraManipulator(new osgGA::TrackballManipulator);
 	_viewer->setThreadingModel(osgViewer::Viewer::SingleThreaded);
 
+	//_viewer->addEventHandler(new SelectModelHandler);
+
 	_pathPickHandler = new PathPickHandler(_viewer);
 }
 
@@ -100,7 +97,7 @@ void ViewerWidget::removeScene()
 
 void ViewerWidget::removeOperation()
 {
-	_pathPickHandler->removeBoxes();
+	//_pathPickHandler->removeBoxes();
 	_viewer->setCameraManipulator(new osgGA::TrackballManipulator);
 }
 
