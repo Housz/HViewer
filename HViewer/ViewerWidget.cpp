@@ -57,8 +57,21 @@ void ViewerWidget::setScene(osg::Node* root)
 
 		_root->addChild(_scene);
 
+		//// PickPoint
+		osg::ref_ptr<PickPointHandler> selector = new PickPointHandler(_viewer->getCamera(), this);
+		osg::ref_ptr<osg::Switch> selPoint = new osg::Switch;
+		selPoint->addChild(selector->createPointSelector());
+		_root->addChild(selPoint);
+		_viewer->addEventHandler(selector);
+
 		//light
 		//_root->addChild(createLightSource());
+
+		// ¿¹¾â³Ý
+		osg::Multisample* pms = new osg::Multisample;
+		pms->setSampleCoverage(1, true);
+		_root->getOrCreateStateSet()->setAttributeAndModes(pms, osg::StateAttribute::ON);
+
 
 		_viewer->setSceneData(_root);
 	}
@@ -119,7 +132,7 @@ void ViewerWidget::changeToSurfaceMode()
 			->setAttributeAndModes(new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::FILL));
 	}
 }
-
+  
 
 void ViewerWidget::switchLayer(int index, bool targetStatus)
 {
@@ -273,4 +286,14 @@ void ViewerWidget::setBackColor(int r, int g, int b)
 {
 	osg::Camera* camera = _viewer->getCamera();
 	camera->setClearColor(osg::Vec4(r, g, b, 1.0));
+}
+
+//void ViewerWidget::setLableR(QLabel *lable)
+//{
+//	_lable = lable;
+//}
+
+void ViewerWidget::setLabelText()
+{
+	
 }

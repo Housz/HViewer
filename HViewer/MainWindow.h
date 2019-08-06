@@ -16,6 +16,9 @@
 #include <QIcon>
 #include <QApplication>
 #include <QColorDialog>
+#include <QString>
+
+#include <osg/Multisample>
 
 #include "ViewerWidget.h"
 #include "treeWidget.h"
@@ -34,16 +37,21 @@ public:
 	~MainWindow();
 
 	void setStatusText(QString);
+	//void setVerticeText(QString);
+
 private:
 	ViewerWidget* _viewerWidget;
-	QLabel* label_L;
+	QLabel* label_L; // path
+	QLabel* label_R; // vertex
 
 	QToolBar* _treeToolBar;
 	TreeWidget* _treeWidget;
 
 	QToolBar* _toolBar;
 
-
 	void setLayerList(osg::Group*);
 	void initLayerList(osg::Group*);
+
+public slots:
+	void setLabelR(QString str);
 };

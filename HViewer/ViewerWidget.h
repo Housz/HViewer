@@ -5,6 +5,9 @@
 #include <QtGui/QtGui>
 #include <QVBoxLayout>
 #include <QDebug>
+#include <QLabel>
+#include <QMainWindow> 
+#include <QString>
 
 #include <osgDB/ReadFile>
 #include <osgGA/TrackballManipulator>
@@ -48,8 +51,9 @@
 #include <osg/LightSource> 
 #include <osg/Multisample>
 
-
 #include "PathPickHandler.h"
+
+#include "PickPointHandler.h"
 
 #include "SelectModelHandler.h"
 
@@ -59,6 +63,8 @@
 
 class ViewerWidget : public QWidget
 {
+	Q_OBJECT
+
 public:
 	ViewerWidget(osgQt::GraphicsWindowQt* gw);
 	~ViewerWidget();
@@ -85,6 +91,8 @@ public:
 	void removePicker();
 
 	void setBackColor(int r, int g, int b);
+
+	void setLabelText();
 
 protected:	
 	QTimer _timer;
@@ -120,5 +128,9 @@ protected:
 	osg::ref_ptr<osg::Transform> _boxTransform;
 
 	ClipCallback* _clipCallback;
+
+signals:
+	void labelRReturn(QString);
+
 };
 

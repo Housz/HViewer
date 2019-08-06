@@ -1,4 +1,4 @@
-# A 3D model viewer based on OpenSceneGraph 3 and QT 5 
+# A 3D model viewer based on OpenSceneGraph 3 and Qt 5 
 OpenSceneGraph 3.6.3, QT 5.11.2, Visual Studio 2017
 
 ## example
