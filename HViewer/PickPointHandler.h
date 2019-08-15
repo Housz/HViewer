@@ -12,6 +12,7 @@
 #include <Qstring>
 #include <QLabel>
 #include <QDebug> 
+#include <osg/MatrixTransform>
 
 //#include "MainWindow.h"
 

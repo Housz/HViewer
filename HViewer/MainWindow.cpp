@@ -18,6 +18,8 @@ osgQt::GraphicsWindowQt* createGraphicsWindow(int x, int y, int w, int h)
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
+	this->setAcceptDrops(true);
+
 	// ViewerWidget
 	osgQt::GraphicsWindowQt* gw = createGraphicsWindow(0, 0, 0, 0);
 	_viewerWidget = new ViewerWidget(gw);
@@ -306,3 +308,54 @@ void MainWindow::setLabelR(QString str)
 {
 	label_R->setText(str);
 }
+
+void MainWindow::dragEnterEvent(QDragEnterEvent * event)
+{
+	if (event->mimeData()->hasUrls())    // 数据中包含URL
+		event->acceptProposedAction();  // 接收动作
+	else event->ignore();
+}
+
+void MainWindow::dropEvent(QDropEvent * event)
+{
+	const QMimeData* mimeData = event->mimeData();
+	if (mimeData->hasUrls())
+	{
+		QList<QUrl> urlList = mimeData->urls(); // URL列表
+		QString fileName = urlList.at(0).toLocalFile(); // 第一个URL表示为本地文件路径
+		if (!fileName.isEmpty()) // 文件路径非空
+		{
+			_viewerWidget->removeScene();
+			setStatusText("");
+			setLabelR("");
+			initLayerList(NULL);
+
+			QFileInfo fileinfo = QFileInfo(fileName);
+			if (fileinfo.suffix() != "3dt" &&
+				fileinfo.suffix() != "osg" &&
+				fileinfo.suffix() != "obj")
+				return;
+
+			if (!fileName.isEmpty())
+			{
+				QTextCodec *code = QTextCodec::codecForName("GB2312");
+				std::string name = code->fromUnicode(fileName).data();
+				_viewerWidget->setScene(osgDB::readNodeFile(name));
+
+				//获取层信息
+				if (fileinfo.suffix() == "3dt")
+				{
+					setLayerList(_viewerWidget->getScene()->asGroup());
+					_treeToolBar->show();
+				}
+				else
+				{
+					initLayerList(NULL);
+					_treeToolBar->hide();
+				}
+			}
+			setStatusText(fileName);
+		}
+	}
+}
+

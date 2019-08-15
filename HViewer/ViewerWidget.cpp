@@ -55,7 +55,12 @@ void ViewerWidget::setScene(osg::Node* root)
 
 		_root->removeChild(0, _root->getNumChildren());
 
-		_root->addChild(_scene);
+		// correct coords
+		osg::ref_ptr<osg::MatrixTransform> mt = new osg::MatrixTransform;
+		mt->setMatrix(osg::Matrix::rotate(osg::Quat(osg::PI_2, osg::X_AXIS)));
+		mt->addChild(_scene);
+
+		_root->addChild(mt);
 
 		//// PickPoint
 		osg::ref_ptr<PickPointHandler> selector = new PickPointHandler(_viewer->getCamera(), this);

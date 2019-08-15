@@ -50,16 +50,14 @@ void PickPointHandler::doUserOperations(osgUtil::LineSegmentIntersector::Interse
 		{
 			selVertices->front() = vertex;
 
-			//std::cout << vertex.x() << std::endl;
-			//std::cout << vertex.y() << std::endl;
-			//std::cout << vertex.z() << std::endl;
+			vertex = osg::Matrix::rotate(osg::Quat(-osg::PI_2, osg::X_AXIS)) * vertex;
 
 			QString strVer = "X: ";
-			strVer += QString::number(vertex.x(), 'f', 3);
+			strVer += QString::number(vertex.x(), 'f', 4);
 			strVer += ", Y: ";
-			strVer += QString::number(vertex.y(), 'f', 3);
+			strVer += QString::number(vertex.y(), 'f', 4);
 			strVer += ", Z:";
-			strVer += QString::number(vertex.z(), 'f', 3);
+			strVer += QString::number(vertex.z(), 'f', 4);
 
 			qDebug() << vertex.x() << " " << vertex.y() << " " << vertex.z() << endl;
 
